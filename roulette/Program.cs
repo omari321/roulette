@@ -7,9 +7,81 @@ namespace roulette
     {
         static void Main(string[] args)
         {
-            Game.CreateSelf();
+            new Table();   
+        }
+
+}
+
+    public class Table
+    {
+        private string Name;
+        public double Money;
+        private Dictionary<int, int> Magida = new Dictionary<int, int>();
+        private List<List<double>> Bets;
+        private List<string> madeBets;
+        public Table()
+        {
+            this.Bets = new List<List<double>>();
+            this.madeBets = new List<string>();
+            FillTable();
+            Registrer();
+        }
+        private void FillTable()
+        {
+
+            for (int i = 1; i <= 36; i++)
+            {
+
+                if (i <= 10)
+                {
+                    if (i % 2 == 0)
+                    {
+                        Magida.Add(i, (int)Colors.Red);
+                    }
+                    else
+                    {
+                        Magida.Add(i, (int)Colors.Black);
+                    }
+                }
+                else if (i <= 19)
+                {
+                    if (i % 2 == 0)
+                    {
+                        Magida.Add(i, (int)Colors.Black);
+                    }
+                    else
+                    {
+                        Magida.Add(i, (int)Colors.Red);
+                    }
+                }
+                else if (i <= 28)
+                {
+                    if (i % 2 == 0)
+                    {
+                        Magida.Add(i, (int)Colors.Red);
+                    }
+                    else
+                    {
+                        Magida.Add(i, (int)Colors.Black);
+                    }
+                }
+                else
+                {
+                    if (i % 2 == 0)
+                    {
+                        Magida.Add(i, (int)Colors.Black);
+                    }
+                    else
+                    {
+                        Magida.Add(i, (int)Colors.Red);
+                    }
+                }
+            }
+        }
+        private void Registrer()
+        {
             Console.WriteLine("gamarjobat gtxovt sheiyvanot saxeli");
-            String Name=Console.ReadLine();
+            this.Name = Console.ReadLine();
             Console.WriteLine("gtxovt sheiyvanot sasurveli tanxa (1000 ze naklebi)");
             Double Fuli;
             while (true)
@@ -17,21 +89,22 @@ namespace roulette
                 var ricxvi = Console.ReadLine();
                 if (Double.TryParse(ricxvi, out var ricxvi2))
                 {
-                    if (ricxvi2>0 &&ricxvi2<=1000)
+                    if (ricxvi2 > 0 && ricxvi2 <= 1000)
                     {
-                    Fuli= ricxvi2;
-                    break;
+                        Fuli = ricxvi2;
+                        break;
                     }
                 }
-                Console.WriteLine("გთხოვთ შეიყვანოთ სწორად");
+                Console.WriteLine("gtxovt sheiyvanot scorad");
 
             }
-            Person person = new Person(Name,Fuli);
-            GameMenu(person);
+            this.Money = Fuli;
+            GameMenu();
         }
-        static void GameMenu(Person person)
+
+        private void GameMenu()
         {
-            Becdva();
+            MenuPrint();
             int archevani;
             while (true)
             {
@@ -47,271 +120,263 @@ namespace roulette
                 Console.WriteLine("gtxovt sheiyvanot cifri 1 dan samamde");
 
             }
-            if (archevani==1)
+            if (archevani == 1)
             {
-                startGame(person);
+                startGame();
             }
-            else if (archevani==2)
+            else if (archevani == 2)
             {
-                Console.WriteLine($"tqveni tanxa {person.Money}");
-                GameMenu(person);
+                Console.WriteLine($"tqveni tanxa {this.Money}");
+                GameMenu();
             }
             else
             {
                 Console.WriteLine("kargad brdzandebodet");
             }
         }
+        private void startGame()
+        {
+            while(true)
+            {
+                Console.WriteLine("daicket  tamashi an dabrundit meniushi  \n 1 - dackeba \n 2 - meniushi dabruneba");
+                int choice;
+                while (true)
+                {
+                    var input3 = Console.ReadLine();
+                    if (int.TryParse(input3, out var ricxvi2))
+                    {
+                        if (ricxvi2 > 0 && ricxvi2 <= 2)
+                        {
+                            choice = ricxvi2;
+                            break;
+                        }
+                    }
+                    Console.WriteLine($"gtxovt sheiyvanot scorad (1 an 2 )");
 
+                }
+                if (choice == 1)
+                {
+                    if (this.Money > 0)
+                    {
+                        MakeBets();
+                    }
+                    else
+                    {
+                        Console.WriteLine("tqven argaqvt fuli satamashod");
+                        break;
+                    }
+                }
+                else
+                {
+                    break;
+                }
+            }
+            GameMenu();
+        }
+        private void MakeBets()
+        {
+            Bets.Clear();
+            madeBets.Clear();
+            List<double> Bet = new List<double>();
+            while (true)
+            {
+                Console.WriteLine("dadet fsoni ricxvze an ferze, an gaagrdzelet  (1- ricxvi , 2 feri ,3 gagrdzeleba (tu dadebuli gaqvt)");
+                int choiceOfbet;
+                while (true)
+                {
+                    var input = Console.ReadLine();
+                    if (int.TryParse(input, out var ricxvi2))
+                    {
+                        if (ricxvi2 > 0 && ricxvi2 <= 3)
+                        {   
+                            choiceOfbet = ricxvi2;
+                            break;
+                        }
+                    }
+                    Console.WriteLine($"gtxovt sheiyvanot scorad (tu argaqvt dadebuli jer dadet)");
 
-        static void startGame(Person person)
-        {   
-            Console.WriteLine("raze gindat dadeba ferze tu rivxvze (1- ricxvi , 2 feri)");
-            int choiceOfbet;
+                }
+                Bet.Add(choiceOfbet);
+                if (choiceOfbet == 1)
+                {
+                    Bet.Add(ChooseNumber());
+                }
+                else if (choiceOfbet == 2)
+                {
+                    if (madeBets.Contains(Colors.Red.ToString()) && madeBets.Contains(Colors.Black.ToString()))
+                    {
+                        Console.WriteLine("orive feri ukve archeuli gaqvt");
+                        continue;
+                    }
+                    else
+                    {
+                        Bet.Add(ChooseColor());
+                    }
+
+                }
+                else
+                {
+                    if (Bets.Count>0)
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        Console.WriteLine("argaqvt jer gaketebuli fsoni");
+                        continue;
+                    }
+                }
+                Bet.Add(ChooseBetMoney());
+                Bets.Add(Bet);
+                int gagrdzeleba = ContinueToBet();
+                if (gagrdzeleba != 1)
+                    break;
+            }
+            (string carmateba, double tanxa) = CalculateWin();
+            if (carmateba== "moiget")
+            {
+                Console.WriteLine($"tqven moiget {tanxa} lari, tqveni tanxaa {this.Money}");
+            }
+            else
+            {
+                Console.WriteLine($"tqven caaget {tanxa} lari, tqveni tanxaa {this.Money}");
+            }
+
+        }
+        private int ChooseNumber()
+        {
+            Console.WriteLine($"aircie cifri dasadebad");
+
+            int Number;
             while (true)
             {
                 var input = Console.ReadLine();
-                if (int.TryParse(input, out var ricxvi2))
+                if (int.TryParse(input, out var ricxvi))
                 {
-                    if (ricxvi2 > 0 && ricxvi2 <=2)
+                    if (ricxvi > 0 && ricxvi <= 36)
                     {
-                        choiceOfbet = ricxvi2;
+                        Number = ricxvi;
+                        if (this.madeBets.Contains(Number.ToString()))
+                        {
+                            Console.WriteLine("es ricxvi ukve archeuli gaqvt");
+                            continue;
+                        }
+                        this.madeBets.Add(Number.ToString());
+                        break;
+                    }
+                }
+                Console.WriteLine("gtxovt sheiyvanot scorad (1-36 mde)");
+            }
+            return Number;
+        }
+        private int ChooseColor()
+        {
+            int Feri;
+            Console.WriteLine("airchiet feri (1-shavi , 2-witeli)");
+            while (true)
+            {
+                var input5 = Console.ReadLine();
+                if (int.TryParse(input5, out var ricxvi2))
+                {
+                    if (ricxvi2 > 0 && ricxvi2 <= 2)
+                    {
+                        Feri = ricxvi2;
+                        if (this.madeBets.Contains(((Colors)Feri).ToString()))
+                        {
+                            Console.WriteLine("es feri ukve archeuli gaqvt");
+                            continue;
+                        }
+                        madeBets.Add(((Colors)Feri).ToString());
                         break;
                     }
                 }
                 Console.WriteLine($"gtxovt sheiyvanot scorad)");
 
             }
-            int Number = -1;
-            int Feri = -1;
-            if (choiceOfbet==1)
-            {
-                Number = NumberBet(person);
-            }
-            else
-            {
-                Console.WriteLine("airchiet feri (1-shavi , 2-witeli)");
-                while (true)
-                {
-                    var input5 = Console.ReadLine();
-                    if (int.TryParse(input5, out var ricxvi2))
-                    {
-                        if (ricxvi2 > 0 && ricxvi2 <= 2)
-                        {
-                            Feri = ricxvi2;
-                            break;
-                        }
-                    }
-                    Console.WriteLine($"gtxovt sheiyvanot scorad)");
-
-                }
-            }
-           
-            Console.WriteLine($"gtxovt sheiyvanet sasurveli tanxa arsebulidan {person.Money}");
+            return Feri;
+        }
+        private double ChooseBetMoney()
+        {
+            Console.WriteLine($"gtxovt sheiyvanet sasurveli tanxa dasadebad arsebulidan {this.Money} (max bet 60)");
             double tanxa;
             while (true)
             {
                 var input2 = Console.ReadLine();
                 if (double.TryParse(input2, out var ricxvi2))
                 {
-                    if (ricxvi2 > 0  &&  ricxvi2 <= person.Money && ricxvi2<=60)
+                    if (ricxvi2 > 0 && ricxvi2 <= this.Money && ricxvi2 <= 60)
                     {
                         tanxa = ricxvi2;
-                        Game.Bet(person,tanxa);
+                        Game.Bet(this, tanxa);
                         break;
                     }
                 }
-                Console.WriteLine($"gtxovt sheiyvanot arsebulidan scorad (arsebuli {person.Money} da 60 ze naklebi)");
+                Console.WriteLine($"gtxovt sheiyvanot arsebulidan scorad (arsebuli {this.Money} da 60 ze naklebi)");
 
             }
-            int shedegi = Game.GetRandomNumber();
-            Console.WriteLine($"gacherda {shedegi}");
-            if (Number!=-1)
-            {
-            if (shedegi==Number)
-            {
-                Game.WinByColor(person, tanxa);   
-                Console.WriteLine($"tqven moiget , gagiormagdat tanxa , tqveni tanxaa {person.Money}");
-            }
-            else
-                {
-                    Console.WriteLine($"tqven caaget tqveni tanxaa {person.Money}");
-                }
-            }
-            else
-            {
-                if (Feri==1)
-                {
-                    if (Game.Black.Contains(shedegi))
-                    {
-                        Game.WinByColor(person, tanxa);
-                        Console.WriteLine($"tqven daamtxviet feri tqveni tanxaa {person.Money}");
-                    }
-                     else
-                {
-                    Console.WriteLine($"tqven caaget tqveni tanxaa {person.Money}");
-                }
-                }
-                else
-                {
-                    if (Game.Red.Contains(shedegi))
-                    {
-                        Game.WinByColor(person, tanxa);
-                        Console.WriteLine($"tqven daamtxviet feri tqveni tanxaa {person.Money}");
-                    }
-                    else
-                    {
-                        Console.WriteLine($"tqven caaget tqveni tanxaa {person.Money}");
-                    }
-                }
-            }
-           
-            
-
-            Console.WriteLine("kidev gsurt tu gindat meniushi dabruneba \n 1 - kidev \n 2 - meniushi dabruneba");
-            int choice;
-            while (true)
-            {
-                var input3 = Console.ReadLine();
-                if (int.TryParse(input3, out var ricxvi2))
-                {
-                    if (ricxvi2 > 0 && ricxvi2 <=2)
-                    {
-                        choice = ricxvi2;
-                        break;
-                    }
-                }
-                Console.WriteLine($"gtxovt sheiyvanot scorad (1 an 2 )");
-
-            }
-            if (choice==1)
-            {
-                if (person.Money>0)
-                {
-                    startGame(person);
-                }
-                else
-                {
-                    Console.WriteLine("tqven argaqvt fuli satamashod");
-                }
-            }
-            else
-            {
-                GameMenu(person);
-            }
+            return tanxa;
         }
-        static int  NumberBet(Person person)
-        {
-        Console.WriteLine($"{person.Name} aircie cifri dasadebad");
-            
-                    int  Number;
-                    while (true)
-                    {
-                        var input=Console.ReadLine();
-                        if (int.TryParse(input, out var ricxvi2))
-                        {
-                            if (ricxvi2 > 0 && ricxvi2 <= 1000)
-                            {
-                                Number = ricxvi2;
-                                break;
-                            }
-                        }
-                        Console.WriteLine("gtxovt sheiyvanot scorad (1-36 mde)");
-
-                    }
-                    return Number;
-        }
-        static void Becdva()
+        private void MenuPrint()
         {
             Console.WriteLine("gamarjobat tqveni archevania sheyvanisas \n 1 - tamashis dackeba  \n 2 - amjamindeli tanxis naxva \n 3 - tamashidan gamosvla");
         }
-
-}
-    public class Person
-    { 
-        public string Name { get; set; }
-        public double Money { get; set; }
-
-        public Person(string Name,double money)
+        private int ContinueToBet()
         {
-            this.Name = Name;
-            this.Money = money;
-        }
-        public Person()
-        {
-
-        }
-    }
-    public class Table
-    {
-        private double Money;
-        public static Dictionary<int,int> Magida = new Dictionary<int,int>();
-        public Table(double money)
-        {
-            this.Money = money;
-            FillTable();
-        }
-        private static void FillTable()
-        {
-
-            for (int i = 1; i <= 36; i++)
+            Console.WriteLine("gindat tuara kidev fsonis dadeba? (1-ki, 2-ara)");
+            int choiceOfbet;
+            while (true)
             {
-
-                if (i <= 10)
+                var input = Console.ReadLine();
+                if (int.TryParse(input, out var ricxvi2))
                 {
-                    if (i % 2 == 0)
+                    if (ricxvi2 > 0 && ricxvi2 <= 2)
                     {
-                        Game.Red.Add(i);
-                        Magida.Add(i, (int)Colors.Red);
-                    }
-                    else
-                    {
-                        Game.Black.Add(i);
-                        Magida.Add(i, (int)Colors.Black);
+                        choiceOfbet = ricxvi2;
+                        break;
                     }
                 }
-                else if (i <= 19)
+                Console.WriteLine($"gtxovt sheiyvanot scorad)");
+            }
+            return choiceOfbet;
+        }
+        private (string,double) CalculateWin()
+        {
+            double mogebuli = 0;
+            double dadebuli = 0;
+            foreach (List<double> i in this.Bets)
+            {
+                int Shedegi = Game.GetRandomNumber();
+                if (i[1] == 1)
                 {
-                    if (i % 2 == 0)
+                    dadebuli += i[2];
+                    //var ans = (Colors)Convert.ToInt64(i[1]);
+                    if (Magida[Convert.ToInt32(i[1])]==Magida[Shedegi])
                     {
-                        Game.Black.Add(i);
-                        Magida.Add(i, (int)Colors.Black);
-                    }
-                    else
-                    {
-                        Game.Red.Add(i);
-                        Magida.Add(i, (int)Colors.Red);
-                    }
-                }
-                else if (i <= 28)
-                {
-                    if (i % 2 == 0)
-                    {
-                        Game.Red.Add(i);
-                        Magida.Add(i, (int)Colors.Red);
-                    }
-                    else
-                    {
-                        Game.Black.Add(i);
-                        Magida.Add(i, (int)Colors.Black);
+                        
+                       mogebuli+=Game.WinByColor(this,i[2]);
                     }
                 }
                 else
                 {
-                    if (i % 2 == 0)
+                    dadebuli += i[2];
+                    if (Shedegi==i[1])
                     {
-                        Game.Black.Add(i);
-                        Magida.Add(i, (int)Colors.Black);
+                        
+                        mogebuli += Game.WinByNumber(this,i[2]);
                     }
-                    else
-                    {
-                        Game.Red.Add(i);
-                        Magida.Add(i, (int)Colors.Red);
-                    }
-                }
                 }
             }
+            if (mogebuli>dadebuli)
+            {
+                return ("moiget",mogebuli);
+            }
+            else
+            {
+                return ("caaget", dadebuli-mogebuli);
+            }
         }
-    public enum Colors
+    }
+    public enum Colors:int
         {
             Black=1,
             Red=2,
@@ -319,9 +384,6 @@ namespace roulette
 
     public static class Game
     {
-        public static  List<int> Table { get; set; }
-        public static List<int> Red { get; set; }
-        public static List<int> Black { get; set; }
 
 
         static public int GetRandomNumber()
@@ -329,70 +391,17 @@ namespace roulette
             Random rnd = new Random();
             return rnd.Next(1,36);
         }
-        static public void CreateSelf()
-        {
-                    Game.Table = new List<int>();
-                    Game.Black = new List<int>();
-                    Game.Red = new List<int>();
-                    for (int i=1;i<=36;i++)
-                    {
-                        Game.Table.Add(i);
-                        if (i<=10)
-                        {
-                            if (i%2==0)
-                            {
-                                Game.Red.Add(i);
-                            }
-                            else
-                            {
-                                Game.Black.Add(i);
-                            }
-                        }
-                        else if (i<=19)
-                        {
-                            if (i % 2 == 0)
-                            {
-                                Game.Black.Add(i);
-                            }
-                            else
-                            {
-                                Game.Red.Add(i);
-                            }
-                        }
-                        else if (i<=28)
-                        {
-                            if (i % 2 == 0)
-                            {
-                                Game.Red.Add(i);
-                            }
-                            else
-                            {
-                                Game.Black.Add(i);
-                            }
-                        }
-                        else
-                        {
-                            if (i % 2 == 0)
-                            {
-                                Game.Black.Add(i);
-                            }
-                            else
-                            {
-                                Game.Red.Add(i);
-                            }
-                        }
-
-                    }
-        }
-        public static void WinByNumber(Person person, double number)
+        public static double WinByNumber(Table person, double number)
         {
             person.Money += number * 2;
+            return number * 2;
         }
-        public static void WinByColor(Person person, double number)
+        public static double WinByColor(Table person, double number)
         {
             person.Money +=number+ number * 20 / 100;
+            return number + number * 1 / 5;
         }
-        public static void Bet(Person person, double bet)
+        public static void Bet(Table person, double bet)
         {
             person.Money -= bet;
         }
