@@ -56,7 +56,7 @@
              "Type": "Development"
          }
          ```
-      6. ServiceDiscovery (Additional information required here)
+      6. ServiceDiscovery ????????????
 3. **Install B7.UfcNotification.API in IIS**
    - Go to Internet Information Services (IIS) Manager
    - Create Application Pools
