@@ -10,11 +10,12 @@
 
     1. Go to folder find ```appsettings.json``` file, open it and:
         1.  Fill ```Database:ConnectionString``` section with "CARDS2011" database connection string. Database user ***must*** have read rights on database. 
-            ```json
-            "Database": {
-                "ConnectionString": "Server=sql22-n;Database=CARDS2011;Application Name=B7.UfcNotification.Api;TrustServerCertificate=true;Integrated Security=true;"
-            }
-            ```
+
+            '''json
+	            "Database": {
+	                "ConnectionString": "Server=sql22-n;Database=CARDS2011;Application Name=B7.UfcNotification.Api;TrustServerCertificate=true;Integrated Security=true;"
+	            }
+            '''
 
          2.  Create RabbitMq Virtual host named UfcNotification, give the user which will be used in the connection string rights to use it,
 		
@@ -26,37 +27,37 @@ Fill ```EventPublisherBus:ConnectionString``` section with rabbit mq connection 
             }
             ```
 	3.  Fill ```Settings:CacheDuration``` with the amount you want to cache and check previous requests for duplicates.(the default is 60)
-            ```json
-            "Settings": {
-                "CacheDuration": 60
-            }
-            ```
+          
+	   '''json
+	            "Settings": {
+	                "CacheDuration": 60
+	            }
+            '''
 
    
         4. configure logging to your needs
 	```json
-"Serilog": {
-    "UseDefaultConfiguration": true,
-    "MinimumLevel": {
-      "Default": "Verbose",
-      "Override": {
-        "Microsoft": "Information",
-        "System": "Information"
-      }
-    },
-    "WriteTo": [
-      {
-        "Name": "File",
-        "Args": {
-          "path": "logs/.txt",
-          "rollingInterval": "Day",
-          "retainedFileCountLimit": 30
-        }
-      }
+	"Serilog": {
+	    "UseDefaultConfiguration": true,
+	    "MinimumLevel": {
+	      "Default": "Verbose",
+	      "Override": {
+	        "Microsoft": "Information",
+	        "System": "Information"
+	      }
+	    },
+	    "WriteTo": [
+	      {
+	        "Name": "File",
+	        "Args": {
+	          "path": "logs/.txt",
+	          "rollingInterval": "Day",
+	          "retainedFileCountLimit": 30
+	        }
+	      }
 
-    ]
-  }
-	```
+    ]  }```
+	
             
         5. Fill ```AppEnvironment:Type``` with the environment you want it to run in 
             ```json
@@ -64,7 +65,8 @@ Fill ```EventPublisherBus:ConnectionString``` section with rabbit mq connection 
                 "Type": "Development"
             }
             ```
-	 6. ServiceDiscovery ??????????????
+	 
+  6. ServiceDiscovery ??????????????
 1. ## Install B7.UfcNotification.API in IIS
 
     1. Go to Internet Information Services (IIS) Manager
